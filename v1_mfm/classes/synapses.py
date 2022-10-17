@@ -11,17 +11,17 @@ class Synapses():
         self.type = type
 
         # Synaptic properties
-        self.params = self._getParams(type)
+        self.parameters = self._getParameters(type)
 
     @staticmethod
-    def _getParams(type):
+    def _getParameters(type):
         """
         Get synapse parameters from cell type.
         """
 
         # Inhibitory cell
         if type == 'FS':
-            params = {
+            parameters = {
                 'Q': 5*1e-9,
                 'T': 5*1e-3,
                 'E': -80*1e-3
@@ -29,7 +29,7 @@ class Synapses():
 
         # Excitatory cell
         elif type == 'RS':
-            params = {
+            parameters = {
                 'Q': 1*1e-9,
                 'T': 5*1e-3,
                 'E': 0
@@ -38,10 +38,10 @@ class Synapses():
         else:
             raise RuntimeError("Unknown neuron type. Expected 'FS' or 'RS'")
 
-        return params
+        return parameters
 
-    def getParams(self):
+    def getParameters(self):
         """
         Return synaptic properties.
         """
-        return self.params
+        return self.parameters

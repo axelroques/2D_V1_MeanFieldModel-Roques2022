@@ -1,6 +1,6 @@
 
 from .toolbox import gaussian_connectivity
-from .parsers import parseNetworkParams
+from .parsers import parseNetworkParameters
 
 
 import numpy as np
@@ -16,11 +16,11 @@ def generateConnectivityMatrices_SHEET(**kwargs):
         - information on the number of excitatory and inhibitory networks.
     """
 
-    network_params = kwargs['network_params']
+    network_parameters = kwargs['network_parameters']
 
     X, Z, Xn_exc, Xn_inh, \
-        exc_decay_connect, inh_decay_connect = parseNetworkParams(
-            network_params
+        exc_decay_connect, inh_decay_connect = parseNetworkParameters(
+            network_parameters
         )
 
     # Takes care of the normalization of neighbouring connection
@@ -44,11 +44,11 @@ def generateConnectivityMatrices_SHEET(**kwargs):
     #   - Commented = 'base normalization'
     connectivity_normalization_inh = 0.8
     connectivity_normalization_exc = 0.5
-    print('Normalization:')
-    print('Exc =', connectivity_normalization_exc,
-          '; Inh =', connectivity_normalization_inh)
-    print('Exc neighbours:', total_number_neighbour_exc,
-          'Inh neighbours:', total_number_neighbour_inh)
+    # print('Normalization:')
+    # print('Exc =', connectivity_normalization_exc,
+    #       '; Inh =', connectivity_normalization_inh)
+    # print('Exc neighbours:', total_number_neighbour_exc,
+    #       'Inh neighbours:', total_number_neighbour_inh)
 
     '''
     INITIALISATION
@@ -262,11 +262,11 @@ def generateConnectivityMatrices_TORUS(**kwargs):
         - information on the number of excitatory and inhibitory networks.
     """
 
-    network_params = kwargs['network_params']
+    network_parameters = kwargs['network_parameters']
 
     X, Z, Xn_exc, Xn_inh, \
-        exc_decay_connect, inh_decay_connect = parseNetworkParams(
-            network_params
+        exc_decay_connect, inh_decay_connect = parseNetworkParameters(
+            network_parameters
         )
 
     # Takes care of the normalization of neighbouring connection
@@ -436,12 +436,12 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
         - information on the number of excitatory and inhibitory networks.
     """
 
-    network_params = kwargs['network_params']
-    random_conn_params = kwargs['random_conn_params']
+    network_parameters = kwargs['network_parameters']
+    random_conn_parameters = kwargs['random_conn_parameters']
 
     X, Z, Xn_exc, Xn_inh, \
-        exc_decay_connect, inh_decay_connect = parseNetworkParams(
-            network_params
+        exc_decay_connect, inh_decay_connect = parseNetworkParameters(
+            network_parameters
         )
 
     # Takes care of the normalization of neighbouring connection
@@ -494,16 +494,16 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
     RANDOM
     '''
     np.random.seed(19)
-    nb_random_conn = random_conn_params['nb_random_conn']
-    weight_rand = random_conn_params['weight_rand']
+    nb_random_conn = random_conn_parameters['nb_random_conn']
+    weight_rand = random_conn_parameters['weight_rand']
     pixels_x = np.random.randint(len(X), size=nb_random_conn)
     pixels_z = np.random.randint(len(Z), size=nb_random_conn)
     neighb_x = np.random.randint(len(X), size=nb_random_conn)
     neighb_z = np.random.randint(len(Z), size=nb_random_conn)
-    random_conn_params['x_pixel'] = pixels_x
-    random_conn_params['z_pixel'] = pixels_z
-    random_conn_params['x_neigh'] = neighb_x
-    random_conn_params['z_neigh'] = neighb_z
+    random_conn_parameters['x_pixel'] = pixels_x
+    random_conn_parameters['z_pixel'] = pixels_z
+    random_conn_parameters['x_neigh'] = neighb_x
+    random_conn_parameters['z_neigh'] = neighb_z
 
     '''
     CONSTRUCTION

@@ -18,14 +18,14 @@ class NeuronPopulation():
 
         # Get synapse properties
         self.synapses = Synapses(type=self.type)
-        self.synapses_params = self.synapses.getParams()
+        self.synapses_parameters = self.synapses.getParameters()
 
-        # Update synapses params with population properties
-        self.params = self.synapses_params.copy()
-        self._getParams(type, self.params)
+        # Update synapses parameters with population properties
+        self.parameters = self.synapses_parameters.copy()
+        self._getParameters(type, self.parameters)
 
     @staticmethod
-    def _getParams(type, synapes_params):
+    def _getParameters(type, synapes_parameters):
         """
         Infer neuron properties from the input cell type.
         """
@@ -35,7 +35,7 @@ class NeuronPopulation():
 
         # Inhibitory cell
         if type == 'FS':
-            params = {
+            parameters = {
                 'Gl': 10.*1e-9,
                 'Cm': 200.*1e-12,
                 'Trefrac': 5*1e-3,
@@ -52,7 +52,7 @@ class NeuronPopulation():
 
         # Excitatory cell
         elif type == 'RS':
-            params = {
+            parameters = {
                 'Gl': 10.*1e-9,
                 'Cm': 200.*1e-12,
                 'Trefrac': 5*1e-3,
@@ -70,12 +70,12 @@ class NeuronPopulation():
         else:
             raise RuntimeError("Unknown neuron type. Expected 'FS' or 'RS'")
 
-        synapes_params.update(params)
+        synapes_parameters.update(parameters)
 
         return
 
-    def getParams(self):
+    def getParameters(self):
         """
         Return neuron properties.
         """
-        return self.params
+        return self.parameters

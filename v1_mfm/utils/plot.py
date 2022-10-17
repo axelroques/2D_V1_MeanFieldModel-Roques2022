@@ -91,7 +91,8 @@ def xz_combined(Feaff, Fe, Fi, muVn, length, x, z):
     return
 
 
-def xz_movie(Feaff, Fe, Fi, muVn, X, Z, length, fps=10, title='output'):
+def xz_movie(Feaff, Fe, Fi, muVn, X, Z, length,
+             fps=10, path='results/movies/', title='output'):
     """
     Movie of contour plots of Fe_aff, Fe, Fi and muVn in the (x,z) plane. 
     """
@@ -141,9 +142,7 @@ def xz_movie(Feaff, Fe, Fi, muVn, X, Z, length, fps=10, title='output'):
     fig.tight_layout()
 
     # Saving movie
-    absolute_path = os.path.realpath(os.path.dirname(__file__))
-    relative_file_path = f'../results/movies/{title}.mp4'
-    path = os.path.join(absolute_path, relative_file_path)
+    path = f'{path}{title}.mp4'
     anim.save(path)
     print(f'Movie saved in {path}.')
 
@@ -152,7 +151,7 @@ def xz_movie(Feaff, Fe, Fi, muVn, X, Z, length, fps=10, title='output'):
     return
 
 
-def show_rand_conn(random_conn_params):
+def show_rand_conn(random_conn_parameters):
     """
     Plots the random connections in the 'Torus with random elements Model'.
     """
@@ -160,11 +159,11 @@ def show_rand_conn(random_conn_params):
     fig = plt.figure(figsize=(8.5, 8.5))
     ax = fig.add_subplot(111)
     colors = cm.rainbow(np.linspace(
-        0, 1, random_conn_params['nb_random_conn']))
+        0, 1, random_conn_parameters['nb_random_conn']))
 
     for x_pix, z_pix, x_neigh, z_neigh, c in zip(
-            random_conn_params['x_pixel'], random_conn_params['z_pixel'],
-            random_conn_params['x_neigh'], random_conn_params['z_neigh'], colors):
+            random_conn_parameters['x_pixel'], random_conn_parameters['z_pixel'],
+            random_conn_parameters['x_neigh'], random_conn_parameters['z_neigh'], colors):
         ax.scatter(x_pix, z_pix, color=c)
         ax.scatter(x_neigh, z_neigh, color=c)
         ax.plot([x_pix, x_neigh], [z_pix, z_neigh], color=c, linewidth=1)

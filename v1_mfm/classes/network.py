@@ -10,11 +10,11 @@ class Network():
         - conduction_velocity: in mm/s
     """
 
-    def __init__(self, network, custom_params=None) -> None:
+    def __init__(self, network, custom_parameters=None) -> None:
 
         # Default parameters
         self.type = network
-        self.params = {
+        self.parameters = {
             'Ntot': 10000,
             'gei': 0.2,
             'X_discretization': 30.,
@@ -26,10 +26,10 @@ class Network():
             'conduction_velocity': 300.
         }
 
-        # Eventually override default params
-        if custom_params:
-            for key, val in custom_params.items():
-                self.params[key] = val
+        # Eventually override default parameters
+        if custom_parameters:
+            for key, val in custom_parameters.items():
+                self.parameters[key] = val
 
         # Discretize model parameters
         self._mm2pixels()
@@ -39,25 +39,25 @@ class Network():
         Convert all network parameters from mm to pixels.
         """
 
-        ratio = self.params['X_extent']/self.params['X_discretization']
+        ratio = self.parameters['X_extent']/self.parameters['X_discretization']
 
         # Conversion
-        self.params['exc_decay_connect'] = self.params['exc_connect_extent']/ratio
-        self.params['inh_decay_connect'] = self.params['inh_connect_extent']/ratio
+        self.parameters['exc_decay_connect'] = self.parameters['exc_connect_extent']/ratio
+        self.parameters['inh_decay_connect'] = self.parameters['inh_connect_extent']/ratio
 
         # In practice connectivity extends up to 3 std dev.
-        self.params['exc_connected_neighbors'] = int(
-            3*self.params['exc_decay_connect']/ratio
+        self.parameters['exc_connected_neighbors'] = int(
+            3*self.parameters['exc_decay_connect']/ratio
         )
-        self.params['inh_connected_neighbors'] = int(
-            3*self.params['inh_decay_connect']/ratio
+        self.parameters['inh_connected_neighbors'] = int(
+            3*self.parameters['inh_decay_connect']/ratio
         )
-        self.params['conduction_velocity'] = self.params['conduction_velocity']/ratio
+        self.parameters['conduction_velocity'] = self.parameters['conduction_velocity']/ratio
 
         return
 
-    def getParams(self):
+    def getParameters(self):
         """
         Return network parameters.
         """
-        return self.params
+        return self.parameters

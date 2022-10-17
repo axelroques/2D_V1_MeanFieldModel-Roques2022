@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def parseNetworkParams(network_params):
+def parseNetworkParameters(network_parameters):
     """
     Simple helper function that iterates over network 
     parameters and returns relevant parameters for other 
@@ -10,10 +10,10 @@ def parseNetworkParams(network_params):
     """
 
     # Model
-    exc_connected_neighbors = network_params['exc_connected_neighbors']
-    inh_connected_neighbors = network_params['inh_connected_neighbors']
-    exc_decay_connect = network_params['exc_decay_connect']
-    inh_decay_connect = network_params['inh_decay_connect']
+    exc_connected_neighbors = network_parameters['exc_connected_neighbors']
+    inh_connected_neighbors = network_parameters['inh_connected_neighbors']
+    exc_decay_connect = network_parameters['exc_decay_connect']
+    inh_decay_connect = network_parameters['inh_decay_connect']
 
     # Construction of neighbour's 2D matrices
     # Excitatory population
@@ -44,27 +44,27 @@ def parseNetworkParams(network_params):
                     Xn_inh[row, col] = Xn_inh[row, col]
 
     # Construction of X and Z vectors
-    X, Z, = getXZVectors(network_params)
+    X, Z, = getXZVectors(network_parameters)
 
     return X, Z, Xn_exc, Xn_inh, \
         exc_decay_connect, inh_decay_connect
 
 
-def getXZVectors(network_params):
+def getXZVectors(network_parameters):
     """
     Return vectors X and Z.
     """
 
     X = np.linspace(
         0,
-        network_params['X_extent'],
-        int(network_params['X_discretization']),
+        network_parameters['X_extent'],
+        int(network_parameters['X_discretization']),
         endpoint=True
     )
     Z = np.linspace(
         0,
-        network_params['Z_extent'],
-        int(network_params['Z_discretization']),
+        network_parameters['Z_extent'],
+        int(network_parameters['Z_discretization']),
         endpoint=True
     )
 

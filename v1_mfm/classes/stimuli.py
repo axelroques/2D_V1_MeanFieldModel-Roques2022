@@ -28,11 +28,11 @@ class Stimuli():
         self,
         t, X, Z,
         stimulation_type='CENTER',
-        custom_params={}
+        custom_parameters={}
     ) -> None:
 
         # Default stimulation parameters
-        self.params = {
+        self.parameters = {
             't': t,
             'stimulation_type': stimulation_type,
             'sX': 1.5,  # extension of the stimulus in X
@@ -45,12 +45,12 @@ class Stimuli():
         }
 
         # Eventually override default parameters
-        for key, val in custom_params.items():
-            self.params[key] = val
+        for key, val in custom_parameters.items():
+            self.parameters[key] = val
 
         # Time vector for the stimulations
 
-        self.params.update({'t': t})
+        self.parameters.update({'t': t})
 
         # Generate stimulation
         self._generateStimuli(X, Z)
@@ -79,8 +79,8 @@ class Stimuli():
         }
 
         try:
-            self.Fe_aff = stimulation[self.params['stimulation_type']](
-                self.params['t'], X, Z, self.params,
+            self.Fe_aff = stimulation[self.parameters['stimulation_type']](
+                self.parameters['t'], X, Z, self.parameters,
                 self._triple_gaussian
             )
         except KeyError:
@@ -106,11 +106,11 @@ class Stimuli():
             np.exp(-(X-X0)**2/2./sX**2) *\
             np.exp(-(Z-Z0)**2/2./sZ**2)
 
-    def getParams(self):
+    def getParameters(self):
         """
         Return stimulation parameters.
         """
-        return self.params
+        return self.parameters
 
     def getAffStim(self):
         """

@@ -25,7 +25,9 @@ class Model():
         simulation_length=1.0,
         stimulation_type='CENTER',
         BIN=5e-3,
-        random_conn_params=None
+        custom_network_parameters={},
+        custom_stimulation_parameters={},
+        random_conn_parameters={}
     ) -> None:
 
         # Type check
@@ -33,8 +35,8 @@ class Model():
             raise RuntimeError(
                 "Unknown model type. Expected 'SHEET', 'TORUS' or 'TORUSRANDOM'"
             )
-        if (network == 'TORUS') and (random_conn_params == None):
-            self.random_conn_params = {
+        if (network == 'TORUS') and (random_conn_parameters == None):
+            self.random_conn_parameters = {
                 'nb_random_conn': 90,
                 'weight_rand': 1
             }
@@ -50,24 +52,25 @@ class Model():
         )
         self.network_type = network
         self.BIN = BIN
-        self.random_conn_params = random_conn_params
+        self.random_conn_parameters = random_conn_parameters
 
         # Neuron population & parameters
         self.exc_pop = NeuronPopulation(type='RS')
         self.inh_pop = NeuronPopulation(type='FS')
 
         # Network & parameters
-        self.network = Network(network)
-        self.network_params = self.network.getParams()
+        self.network = Network(
+            network, custom_parameters=custom_network_parameters)
+        self.network_parameters = self.network.getParameters()
 
         # Stimulation parameters
-        self.X, self.Z = getXZVectors(self.network_params)
+        self.X, self.Z = getXZVectors(self.network_parameters)
         self.stimulation = Stimuli(
             self.t, self.X, self.Z,
             stimulation_type=stimulation_type,
-            custom_params={}
+            custom_parameters=custom_stimulation_parameters
         )
-        self.stimulation_parameters = self.stimulation.getParams()
+        self.stimulation_parameters = self.stimulation.getParameters()
 
         # Other parameters
         self.ext_drive = 2.
@@ -102,22 +105,24 @@ class Model():
             self.M_conn_exc, self.M_conn_inh, \
                 self.nb_exc_neighb, self.nb_inh_neighb = \
                 np.load(path, allow_pickle=True)
+            print('Successfully loaded connectivity matrices.')
 
         # Otherwise create and load matrices
         except FileNotFoundError:
             self._generateConnectivityMatrices(
                 self.network_type,
-                self.network_params,
-                self.random_conn_params
+                self.network_parameters,
+                self.random_conn_parameters
             )
             self.M_conn_exc, self.M_conn_inh, \
                 self.nb_exc_neighb, self.nb_inh_neighb = \
                 np.load(path, allow_pickle=True)
+            print('Successfully built connectivity matrices.')
 
         return
 
     @staticmethod
-    def _generateConnectivityMatrices(type, network_params, random_conn_params):
+    def _generateConnectivityMatrices(type, network_parameters, random_conn_parameters):
         """
         Generate connectivity matrices for the 
         model type specified.
@@ -131,8 +136,8 @@ class Model():
 
         try:
             model_type[type](
-                network_params=network_params,
-                random_conn_params=random_conn_params
+                network_parameters=network_parameters,
+                random_conn_parameters=random_conn_parameters
             )
 
         except KeyError:
@@ -163,7 +168,7 @@ class Model():
         """
 
         # Initialization
-        conduction_velocity = self.network.params['conduction_velocity']
+        conduction_velocity = self.network.parameters['conduction_velocity']
         dt = (self.t[1] - self.t[0]) / 10
         Fe, Fi, muVn = self.mean_field.getFixedPoint(
             array_shape=np.zeros_like(self.Fe_aff))
@@ -171,10 +176,11 @@ class Model():
 
         # Time loop
         for i_t in range(len(self.t)-1):
-            # Simple time print
-            if i_t % 100 == 0:
-                print('---- Computing time t =', i_t/2,
-                      'ms out of', int(self.simulation_length*1000), 'ms')
+
+            # Progress bar
+            print('\rComputing... [{0:<50s}] {1:5.1f}%'
+                  .format('#' * int((i_t+1)/(len(self.t)-1)*50),
+                          (i_t+1)/(len(self.t)-1)*100), end="")
 
             # Loop over every mean field network
             for i_z in range(len(Z)):
@@ -221,9 +227,10 @@ class Model():
                     Fi[i_t+1, i_x, i_z] = Fi[i_t, i_x, i_z] + \
                         dt/self.BIN*(self.TF_inh(fe, fi) - Fi[i_t, i_x, i_z])
 
-        print('Simulation finished')
+        print('\nSimulation completed.')
 
         self.simulation_results = {
+            'network_parameters': self.network_parameters,
             't': self.t,
             'X': self.X,
             'Z': self.Z,
@@ -242,9 +249,9 @@ class Model():
 
         # Defaults to the population at the center of the network
         if not x:
-            x = int(self.network_params['X_discretization']//2)
+            x = int(self.network_parameters['X_discretization']//2)
         if not z:
-            z = int(self.network_params['Z_discretization']//2)
+            z = int(self.network_parameters['Z_discretization']//2)
 
         Fe = self.simulation_results['Fe']
         Fi = self.simulation_results['Fi']
@@ -255,7 +262,7 @@ class Model():
 
         return
 
-    def movie(self, fps=10, title='output'):
+    def movie(self, fps=10, path='results/movies/', title='output'):
         """
         Movie of contour plots of Fe_aff, Fe, Fi and muVn in the (x,z) plane. 
         """
@@ -267,12 +274,12 @@ class Model():
         xz_movie(
             self.Fe_aff, Fe, Fi, muVn,
             self.X, self.Z, len(self.t),
-            fps=fps, title=title
+            fps=fps, path=path, title=title
         )
 
         return
 
-    def save(self):
+    def save(self, path):
         """
         Save simulation results.
         """
@@ -283,12 +290,14 @@ class Model():
         date = datetime.now()
         filename = f'{date.year}_{date.month}_{date.day}-{date.hour}h{date.minute}min.npy'
 
-        absolute_path = os.path.realpath(os.path.dirname(__file__))
-        relative_file_path = f'../results/{filename}'
-        path = os.path.join(absolute_path, relative_file_path)
+        # absolute_path = os.path.realpath(os.path.dirname(__file__))
+        # relative_file_path = f'../results/{filename}'
+        # path = os.path.join(absolute_path, relative_file_path)
 
-        with open(path, 'wb') as f:
+        with open(f'{path}/{filename}', 'wb') as f:
             pickle.dump(self.simulation_results, f)
+
+        print(f'Simulation saved in {path}{filename}.')
 
         return
 

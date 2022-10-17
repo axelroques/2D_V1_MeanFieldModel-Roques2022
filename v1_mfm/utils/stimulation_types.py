@@ -2,91 +2,95 @@
 import numpy as np
 
 
-def stim_CENTER(t, X, Z, params, triple_gaussian):
+def stim_CENTER(t, X, Z, parameters, triple_gaussian):
 
     # Initialization
-    t = params['t']
+    t = parameters['t']
     X0 = X[int(len(X)/2.)]
     Z0 = Z[int(len(Z)/2.)]
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     X1, t1, Z1 = np.meshgrid(X, t, Z)
     nu_e_aff = triple_gaussian(
-        t1, X1, Z1, params['tstart'],
-        params['Tau1'], params['Tau2'],
-        X0, Z0, params['sX'], params['sZ'], params['amp']
+        t1, X1, Z1, parameters['tstart'],
+        parameters['Tau1'], parameters['Tau2'],
+        X0, Z0, parameters['sX'], parameters['sZ'], parameters['amp']
     )
 
     return nu_e_aff
 
 
-def stim_DOT(t, X, Z, params, triple_gaussian):
+def stim_DOT(t, X, Z, parameters, triple_gaussian):
 
     # Initialization
     X0 = X[int(len(X)*2/5.)]
     Z0 = Z[int(len(Z)*4/5.)]
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     X1, t1, Z1 = np.meshgrid(X, t, Z)
     nu_e_aff = triple_gaussian(
-        t1, X1, Z1, params['tstart'],
+        t1, X1, Z1, parameters['tstart'],
         10e-3, 150e-3,
-        X0, Z0, params['sX'], params['sZ'], params['amp'])
+        X0, Z0, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_DOT_LEFT(t, X, Z, params, triple_gaussian):
+def stim_DOT_LEFT(t, X, Z, parameters, triple_gaussian):
 
     # Initialization
-    t = params['t']
+    t = parameters['t']
     X0 = X[int(len(X)/3.)]
     Z0 = Z[int(len(Z)/2.)]
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     X1, t1, Z1 = np.meshgrid(X, t, Z)
     nu_e_aff = triple_gaussian(
-        t1, X1, Z1, params['tstart'],
-        params['Tau1'], params['Tau2'],
-        X0, Z0, params['sX'], params['sZ'], params['amp'])
+        t1, X1, Z1, parameters['tstart'],
+        parameters['Tau1'], parameters['Tau2'],
+        X0, Z0, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_DOT_RIGHT(t, X, Z, params, triple_gaussian):
+def stim_DOT_RIGHT(t, X, Z, parameters, triple_gaussian):
 
     # Initialization
-    t = params['t']
+    t = parameters['t']
     X0 = X[int(len(X)*2./3.)]
     Z0 = Z[int(len(Z)/2.)]
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     X1, t1, Z1 = np.meshgrid(X, t, Z)
     nu_e_aff = triple_gaussian(
-        t1, X1, Z1, params['tstart'] + 100e-3,
-        params['Tau1'], params['Tau2'],
-        X0, Z0, params['sX'], params['sZ'], params['amp'])
+        t1, X1, Z1, parameters['tstart'] + 100e-3,
+        parameters['Tau1'], parameters['Tau2'],
+        X0, Z0, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_DOUBLE(t, X, Z, params, triple_gaussian):
+def stim_DOUBLE(t, X, Z, parameters, triple_gaussian):
 
     # Initialization
     X0_1 = X[int(len(X)/3.)]
@@ -95,30 +99,32 @@ def stim_DOUBLE(t, X, Z, params, triple_gaussian):
     print(X0_1, X0_2)
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Calculation of triple gaussian with a meshgrid
     X1, t1, Z1 = np.meshgrid(X, t, Z)
     nu_e_aff = triple_gaussian(
-        t1, X1, Z1, params['tstart'],
-        params['Tau1'], params['Tau2'],
-        X0_1, Z0, params['sX'], params['sZ'], params['amp']) + \
+        t1, X1, Z1, parameters['tstart'],
+        parameters['Tau1'], parameters['Tau2'],
+        X0_1, Z0, parameters['sX'], parameters['sZ'], parameters['amp']) + \
         triple_gaussian(
-        t1, X1, Z1, params['tstart'] + 100e-3,
-        params['Tau1'], params['Tau2'],
-        X0_2, Z0, params['sX'], params['sZ'], params['amp'])
+        t1, X1, Z1, parameters['tstart'] + 100e-3,
+        parameters['Tau1'], parameters['Tau2'],
+        X0_2, Z0, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_MOV_HORIZ_LINE(t, X, Z, params, triple_gaussian):
+def stim_MOV_HORIZ_LINE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -133,19 +139,20 @@ def stim_MOV_HORIZ_LINE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X0[pos], Z0, params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0[pos], Z0, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_MOV_VERT_LINE(t, X, Z, params, triple_gaussian):
+def stim_MOV_VERT_LINE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -159,20 +166,21 @@ def stim_MOV_VERT_LINE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(Z0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] +
+            t1, X1, Z1, parameters['tstart'] +
             100e-3 + pos*2.5e-3,
             10e-3, 50e-3,
-            X0, Z0[pos], params['sX'], params['sZ'], params['amp'])
+            X0, Z0[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_VERT_LINE(t, X, Z, params, triple_gaussian):
+def stim_VERT_LINE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -186,19 +194,20 @@ def stim_VERT_LINE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(Z0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + 100e-3,
+            t1, X1, Z1, parameters['tstart'] + 100e-3,
             10e-3, 130e-3,
-            X0, Z0[pos], params['sX'], params['sZ'], params['amp'])
+            X0, Z0[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_LINE_MOTION(t, X, Z, params, triple_gaussian):
+def stim_LINE_MOTION(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -215,24 +224,25 @@ def stim_LINE_MOTION(t, X, Z, params, triple_gaussian):
     print('\t Visual stimuli: line motion')
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     nu_e_aff += triple_gaussian(
-        t1, X1, Z1, params['tstart'],
+        t1, X1, Z1, parameters['tstart'],
         10e-3, 150e-3,
-        X0_dot, Z0_dot, params['sX'], params['sZ'], params['amp'])
+        X0_dot, Z0_dot, parameters['sX'], parameters['sZ'], parameters['amp'])
     for pos in range(len(Z0_line)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + 100e-3,
+            t1, X1, Z1, parameters['tstart'] + 100e-3,
             10e-3, 130e-3,
-            X0_line, Z0_line[pos], params['sX'], params['sZ'], params['amp'])
+            X0_line, Z0_line[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_DOUBLE_LINE(t, X, Z, params, triple_gaussian):
+def stim_DOUBLE_LINE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -252,23 +262,24 @@ def stim_DOUBLE_LINE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X01)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X01[pos], Z01, params['sX'], params['sZ'], params['amp']) +\
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X01[pos], Z01, parameters['sX'], parameters['sZ'], parameters['amp']) +\
             triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X02[pos], Z02, params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X02[pos], Z02, parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_SMILEY(t, X, Z, params, triple_gaussian):
+def stim_SMILEY(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -303,27 +314,28 @@ def stim_SMILEY(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X0_i)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*50e-3,
-            params['Tau1'], params['Tau2'],
-            X0_i[pos], Z0_i[pos], params['sX'], params['sZ'], params['amp']) +\
+            t1, X1, Z1, parameters['tstart'] + pos*50e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0_i[pos], Z0_i[pos], parameters['sX'], parameters['sZ'], parameters['amp']) +\
             triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*50e-3,
-            params['Tau1'], params['Tau2'],
-            X0_O[pos], Z0_O[pos], params['sX'], params['sZ'], params['amp']) +\
+            t1, X1, Z1, parameters['tstart'] + pos*50e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0_O[pos], Z0_O[pos], parameters['sX'], parameters['sZ'], parameters['amp']) +\
             triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*50e-3,
-            params['Tau1'], params['Tau2'],
-            X0_smile[pos], Z0_smile[pos], params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*50e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0_smile[pos], Z0_smile[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_RECTANGLE(t, X, Z, params, triple_gaussian):
+def stim_RECTANGLE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -348,19 +360,20 @@ def stim_RECTANGLE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X0[pos], Z0[pos], params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0[pos], Z0[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_CIRCLE(t, X, Z, params, triple_gaussian):
+def stim_CIRCLE(t, X, Z, parameters, triple_gaussian):
 
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -381,18 +394,19 @@ def stim_CIRCLE(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X0[pos], Z0[pos], params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0[pos], Z0[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff
 
 
-def stim_RANDOM(t, X, Z, params, triple_gaussian):
+def stim_RANDOM(t, X, Z, parameters, triple_gaussian):
     # Check if temporal boundary is ok, making it longer if stim not fully developed
-    params['tstart'] = np.max([3.*params['Tau1'], params['tstart']])
-    params['tstop'] = np.max(
-        [params['tstart']+3.*params['Tau2'], params['tstop']])
+    parameters['tstart'] = np.max(
+        [3.*parameters['Tau1'], parameters['tstart']])
+    parameters['tstop'] = np.max(
+        [parameters['tstart']+3.*parameters['Tau2'], parameters['tstop']])
 
     # Complex stimuli generation
     X1, t1, Z1 = np.meshgrid(X, t, Z)
@@ -408,8 +422,8 @@ def stim_RANDOM(t, X, Z, params, triple_gaussian):
     nu_e_aff = np.zeros((len(t), len(X), len(Z)))
     for pos in range(len(X0)):
         nu_e_aff += triple_gaussian(
-            t1, X1, Z1, params['tstart'] + pos*10e-3,
-            params['Tau1'], params['Tau2'],
-            X0[pos], Z0[pos], params['sX'], params['sZ'], params['amp'])
+            t1, X1, Z1, parameters['tstart'] + pos*10e-3,
+            parameters['Tau1'], parameters['Tau2'],
+            X0[pos], Z0[pos], parameters['sX'], parameters['sZ'], parameters['amp'])
 
     return nu_e_aff

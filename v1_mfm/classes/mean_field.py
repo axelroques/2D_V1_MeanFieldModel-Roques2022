@@ -98,9 +98,9 @@ class MeanField():
         Fout_th = self._erfc_func(
             muV, sV, TvN, Vthre,
             # Gl is equal for exc or inh pop
-            self.inh_pop.params['Gl'],
+            self.inh_pop.parameters['Gl'],
             # Cm is equal for exc or inh pop
-            self.inh_pop.params['Cm']
+            self.inh_pop.parameters['Cm']
         )
 
         return Fout_th
@@ -110,19 +110,19 @@ class MeanField():
         Computes values needed for the transfer function.
         """
 
-        Ntot = self.network.params['Ntot']
-        gei = self.network.params['gei']
+        Ntot = self.network.parameters['Ntot']
+        gei = self.network.parameters['gei']
         # pconn is equal for exc or inh pop
-        pconn = self.exc_pop.params['p_conn']
+        pconn = self.exc_pop.parameters['p_conn']
         # Gl is equal for exc or inh pop
-        Gl = self.inh_pop.params['Gl']
+        Gl = self.inh_pop.parameters['Gl']
         # El is equal for exc or inh pop
-        El = self.inh_pop.params['El']
+        El = self.inh_pop.parameters['El']
         # Cm is equal for exc or inh pop
-        Cm = self.inh_pop.params['Cm']
-        Qe, Qi = self.exc_pop.synapses_params['Q'], self.inh_pop.synapses_params['Q']
-        Te, Ti = self.exc_pop.synapses_params['T'], self.inh_pop.synapses_params['T']
-        Ee, Ei = self.exc_pop.synapses_params['E'], self.inh_pop.synapses_params['E']
+        Cm = self.inh_pop.parameters['Cm']
+        Qe, Qi = self.exc_pop.synapses_parameters['Q'], self.inh_pop.synapses_parameters['Q']
+        Te, Ti = self.exc_pop.synapses_parameters['T'], self.inh_pop.synapses_parameters['T']
+        Ee, Ei = self.exc_pop.synapses_parameters['E'], self.inh_pop.synapses_parameters['E']
 
         # here TOTAL (sum over synapses) excitatory and inhibitory input
         fe = Fe*(1.-gei)*pconn*Ntot
@@ -160,9 +160,9 @@ class MeanField():
 
         # Get the correct P parameters depending on the cell type considered.
         if type == 'RS':
-            P = self.exc_pop.params['P']
+            P = self.exc_pop.parameters['P']
         elif type == 'FS':
-            P = self.inh_pop.params['P']
+            P = self.inh_pop.parameters['P']
         else:
             raise RuntimeError('How did you get here?')
 
