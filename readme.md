@@ -1,5 +1,22 @@
 # 2D Primary Visual Cortex Mean-Field Model
 
+## Cite this model
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7442911.svg)](https://doi.org/10.5281/zenodo.7442911)
+
+```
+@software{roques2022,
+  author       = {Axel Roques and Alain Destexhe},
+  title        = {2D Primary Visual Cortex Mean-Field Model},
+  year         = 2022,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.7443057},
+  url          = {https://doi.org/10.5281/zenodo.7443057}
+}
+```
+
+## Summary
+
 Using Voltage-sensitive dye imaging (VSDI) [1, 2], Muller _et al._ showed that the stimulus-evoked population response in the primary visual cortex of the awake monkey performing visual tasks propagates as a travelling wave, with consistent dynamics across trials [3]. Chemla _et al._ further showed that these propagating waves are suppressive and suggested that their role is to increase the acuity of the visual system when presented with ambiguous stimuli [4].
 
 This repository implements a theoretical model that accounts for the aforementioned phenomena. While a detailed model of a neocortical column has been published [5], its computational cost does not allow its generalization to a 1−2 cm² spatial scale.
