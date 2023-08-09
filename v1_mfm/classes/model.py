@@ -27,7 +27,8 @@ class Model():
         BIN=5e-3,
         custom_network_parameters={},
         custom_stimulation_parameters={},
-        random_conn_parameters={}
+        random_conn_parameters={},
+        build_conn_matrices=True
     ) -> None:
 
         # Type check
@@ -35,7 +36,7 @@ class Model():
             raise RuntimeError(
                 "Unknown model type. Expected 'SHEET', 'TORUS' or 'TORUSRANDOM'"
             )
-        if (network == 'TORUS') and (random_conn_parameters == None):
+        if (network == 'TORUSRANDOM') and (random_conn_parameters == None):
             self.random_conn_parameters = {
                 'nb_random_conn': 90,
                 'weight_rand': 1
@@ -60,7 +61,8 @@ class Model():
 
         # Network & parameters
         self.network = Network(
-            network, custom_parameters=custom_network_parameters)
+            network, custom_parameters=custom_network_parameters
+        )
         self.network_parameters = self.network.getParameters()
 
         # Stimulation parameters
@@ -76,7 +78,7 @@ class Model():
         self.ext_drive = 2.
 
         # Connectivity matrices
-        self._getConnectivityMatrices()
+        self._getConnectivityMatrices(build_conn_matrices)
 
         # Mean field formalism
         self.mean_field = MeanField(
@@ -90,7 +92,7 @@ class Model():
         # Get afferent stimulation
         self.Fe_aff = self.stimulation.getAffStim()
 
-    def _getConnectivityMatrices(self):
+    def _getConnectivityMatrices(self, build_conn_matrices):
         """
         Retrieve or generate connectivity matrices for the 
         model type specified. 
@@ -100,12 +102,19 @@ class Model():
         relative_file_path = f'../data/ConnMatrices_{self.network_type}.npy'
         path = os.path.join(absolute_path, relative_file_path)
 
+        # Eventually build connectivity matrices
+        if build_conn_matrices:
+            self._generateConnectivityMatrices(
+                self.network_type,
+                self.network_parameters,
+                self.random_conn_parameters
+            )
+
         # Check if the matrices were previously generated
         try:
             self.M_conn_exc, self.M_conn_inh, \
                 self.nb_exc_neighb, self.nb_inh_neighb = \
                 np.load(path, allow_pickle=True)
-            print('Successfully loaded connectivity matrices.')
 
         # Otherwise create and load matrices
         except FileNotFoundError:
@@ -117,16 +126,21 @@ class Model():
             self.M_conn_exc, self.M_conn_inh, \
                 self.nb_exc_neighb, self.nb_inh_neighb = \
                 np.load(path, allow_pickle=True)
-            print('Successfully built connectivity matrices.')
+
+        print('Successfully loaded connectivity matrices.')
 
         return
 
     @staticmethod
-    def _generateConnectivityMatrices(type, network_parameters, random_conn_parameters):
+    def _generateConnectivityMatrices(
+        type, network_parameters, random_conn_parameters
+    ):
         """
         Generate connectivity matrices for the 
         model type specified.
         """
+
+        print('Building connectivity matrices...')
 
         model_type = {
             'SHEET': generateConnectivityMatrices_SHEET,

@@ -51,12 +51,12 @@ def generateConnectivityMatrices_SHEET(**kwargs):
     #       'Inh neighbours:', total_number_neighbour_inh)
 
     '''
-    INITIALISATION
+    INITIALIZATION
     Generates an array of lists of dictionaries:
         - Each element of the array is a vector that accounts for all the neighbours of this pixel
-        - Each element of this vector is a dictionnary that has 4 arguments: 
-        dist, weight, pos_x, and pos_z 
-        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from 
+        - Each element of this vector is a dictionnary that has 4 arguments:
+        dist, weight, pos_x, and pos_z
+        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from
         the pixel at z=1 and x=9
     '''
     M_conn_exc = [[[dict(dist=None, weight=None, pos_x=None, pos_z=None)
@@ -74,7 +74,6 @@ def generateConnectivityMatrices_SHEET(**kwargs):
     We construct the connectivity matrix for the sheet model, i.e. with mirror boundary
     conditions
     '''
-
     # Pixel loop
     for i_z in range(len(Z)):
         for i_x in range(len(X)):
@@ -87,7 +86,7 @@ def generateConnectivityMatrices_SHEET(**kwargs):
                 for i_xn in row:
                     i_column = i_column + 1
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -97,8 +96,8 @@ def generateConnectivityMatrices_SHEET(**kwargs):
                         )
                         '''
                         We calculate the x position of the valid neighbour from its distance from the center
-                            - we get the z position of the neighbour using the row variable (we generate a 
-                            new row variable with its index from the center of the array) 
+                            - we get the z position of the neighbour using the row variable (we generate a
+                            new row variable with its index from the center of the array)
                             - we calculate the x position and multiply it by the sign of i_xn to know
                             if the neighbour is on the left or on the right of the pixel
                         '''
@@ -167,7 +166,7 @@ def generateConnectivityMatrices_SHEET(**kwargs):
                 for i_xn in row:
                     i_column = i_column + 1
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -177,8 +176,8 @@ def generateConnectivityMatrices_SHEET(**kwargs):
                         )
                         '''
                         We calculate the x position of the valid neighbour from its distance from the center
-                            - we get the z position of the neighbour using the row variable (we generate a 
-                            new row variable with its index from the center of the array) 
+                            - we get the z position of the neighbour using the row variable (we generate a
+                            new row variable with its index from the center of the array)
                             - we calculate the x position and multiply it by the sign of i_xn to know
                             if the neighbour is on the left or on the right of the pixel
                         '''
@@ -244,11 +243,17 @@ def generateConnectivityMatrices_SHEET(**kwargs):
     absolute_path = os.path.realpath(os.path.dirname(__file__))
     relative_file_path = '../data/ConnMatrices_SHEET.npy'
     path = os.path.join(absolute_path, relative_file_path)
-    np.save(path,
-            [M_conn_exc, M_conn_inh,
-             total_number_neighbour_exc,
-             total_number_neighbour_inh])
-    print(f'\n -------> Results saved in {path}')
+    np.save(
+        path,
+        np.array([
+            M_conn_exc, M_conn_inh,
+            total_number_neighbour_exc,
+            total_number_neighbour_inh
+        ], dtype=object
+        )
+    )
+
+    print(f'\t Matrices saved in {path}')
 
     return
 
@@ -300,9 +305,9 @@ def generateConnectivityMatrices_TORUS(**kwargs):
     INITIALISATION
     Generates an array of lists of dictionaries:
         - Each element of the array is a vector that accounts for all the neighbours of this pixel
-        - Each element of this vector is a dictionnary that has 4 arguments: 
-        dist, weight, pos_x, and pos_z 
-        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from 
+        - Each element of this vector is a dictionnary that has 4 arguments:
+        dist, weight, pos_x, and pos_z
+        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from
         the pixel at z=1 and x=9
     '''
     M_conn_exc = [[[dict(dist=None, weight=None, pos_x=None, pos_z=None)
@@ -331,7 +336,7 @@ def generateConnectivityMatrices_TORUS(**kwargs):
                 i_row = i_row + 1
                 for i_xn in row:
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -375,7 +380,7 @@ def generateConnectivityMatrices_TORUS(**kwargs):
                 i_row = i_row + 1
                 for i_xn in row:
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -418,11 +423,16 @@ def generateConnectivityMatrices_TORUS(**kwargs):
     absolute_path = os.path.realpath(os.path.dirname(__file__))
     relative_file_path = '../data/ConnMatrices_TORUS.npy'
     path = os.path.join(absolute_path, relative_file_path)
-    np.save(path,
-            [M_conn_exc, M_conn_inh,
-             total_number_neighbour_exc,
-             total_number_neighbour_inh])
-    print(f'\n -------> Results saved in {path}')
+    np.save(
+        path,
+        np.array([
+            M_conn_exc, M_conn_inh,
+            total_number_neighbour_exc,
+            total_number_neighbour_inh
+        ], dtype=object)
+    )
+
+    print(f'\t Matrices saved in {path}')
 
     return
 
@@ -475,9 +485,9 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
     INITIALISATION
     Generates an array of lists of dictionaries:
         - Each element of the array is a vector that accounts for all the neighbours of this pixel
-        - Each element of this vector is a dictionnary that has 4 arguments: 
-        dist, weight, pos_x, and pos_z 
-        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from 
+        - Each element of this vector is a dictionnary that has 4 arguments:
+        dist, weight, pos_x, and pos_z
+        - M_conn_exc[1][9][5]['dist'] gives the distance of the 5th neighbour from
         the pixel at z=1 and x=9
     '''
     M_conn_exc = [[[dict(dist=None, weight=None, pos_x=None, pos_z=None)
@@ -533,7 +543,7 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
                 i_row = i_row + 1
                 for i_xn in row:
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -577,7 +587,7 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
                 i_row = i_row + 1
                 for i_xn in row:
                     '''
-                    A neighbour is valid if it is close enough (i_xn != -99 by construction 
+                    A neighbour is valid if it is close enough (i_xn != -99 by construction
                     of neighbour's matrix)
                     '''
                     if (i_xn != -99):
@@ -620,10 +630,16 @@ def generateConnectivityMatrices_TORUSRANDOM(**kwargs):
     absolute_path = os.path.realpath(os.path.dirname(__file__))
     relative_file_path = '../data/ConnMatrices_TORUSRANDOM.npy'
     path = os.path.join(absolute_path, relative_file_path)
-    np.save(path,
-            [M_conn_exc, M_conn_inh,
-             total_number_neighbour_exc,
-             total_number_neighbour_inh])
-    print(f'\n -------> Results saved in {path}')
+    np.save(
+        path,
+        np.array([
+            M_conn_exc, M_conn_inh,
+            total_number_neighbour_exc,
+            total_number_neighbour_inh
+        ], dtype=object
+        )
+    )
+
+    print(f'\t Matrices saved in {path}')
 
     return
